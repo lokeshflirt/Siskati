@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siska Portal</title>
+    <!-- Google Fonts से कर्सिव फॉन्ट (Pacifico) और आइकन्स के लिए FontAwesome को जोड़ा गया है -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* बेसिक रीसेट और सेटिंग्स */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f9fc;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+        }
+
+        /* कर्सिव टाइटल स्टाइल */
+        .main-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 3.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* प्रोफेशनल सर्च बार कंटेनर */
+        .search-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            padding: 6px 6px 6px 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            align-items: center;
+            margin-bottom: 35px;
+            transition: all 0.3s ease;
+        }
+        .search-container:focus-within {
+            border-color: #3498db;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        }
+        .search-icon {
+            color: #aaa;
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        .search-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 16px;
+            background: transparent;
+        }
+        .search-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+        .search-btn:hover {
+            background: #2980b9;
+        }
+
+        /* 4-Column ग्रिड लेआउट */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* हमेशा 4 कॉलम रहेंगे */
+            gap: 20px 12px; /* रो और कॉलम के बीच की दूरी */
+            width: 100%;
+            max-width: 500px; /* सर्च बार की चौड़ाई के बराबर */
+        }
+
+        /* प्रत्येक आइकन आइटम की स्टाइल */
+        .grid-item {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .grid-item:active {
+            transform: scale(0.92); /* मोबाइल पर टच करने पर छोटा सा फीडबैक */
+        }
+
+        /* गोल आइकन का बाहरी हिस्सा */
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eaeaea;
+            margin-bottom: 8px;
+            font-size: 1.5rem;
+            color: #555;
+            transition: all 0.2s ease;
+        }
+        .grid-item:hover .icon-circle {
+            background: #3498db;
+            color: #fff;
+            border-color: #3498db;
+        }
+
+        /* खास पोर्टल्स के लिए अलग रंग (ताकि वे अलग दिखें) */
+        .patternpoint .icon-circle {
+            background: #e8f4fd;
+            color: #1a73e8;
+            border-color: #d2e3fc;
+        }
+        .findnum .icon-circle {
+            background: #e6f4ea;
+            color: #137333;
+            border-color: #ceead6;
+        }
+
+        /* आइकन्स के नीचे लिखे नाम की स्टाइल */
+        .icon-name {
+            font-size: 12px;
+            font-weight: 500;
+            max-width: 75px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* नाम बड़ा होने पर ... दिखेगा */
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- कर्सिव टाइटल -->
+    <h1 class="main-title">Siska</h1>
+
+    <!-- प्रोफेशनल सर्च बार -->
+    <form action="https://www.google.com/search" method="GET" class="search-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" name="q" class="search-input" placeholder="यहाँ कुछ भी खोजें..." required>
+        <button type="submit" class="search-btn">खोजें</button>
+    </form>
+
+    <!-- 6x4 का आइकन्स ग्रिड (कुल 24 आइटम्स) -->
+    <div class="icon-grid">
+        
+        <!-- 1. PatternPoint (DD News पर ले जाएगा) -->
+        <a href="https://ddnews.gov.in" target="_blank" class="grid-item patternpoint">
+            <div class="icon-circle">
+                <i class="fa-solid fa-newspaper"></i>
+            </div>
+            <div class="icon-name">patternpoint</div>
+        </a>
+
+        <!-- 2. FindNum (MyBharat पर ले जाएगा) -->
+        <a href="https://mybharat.gov.in" target="_blank" class="grid-item findnum">
+            <div class="icon-circle">
+                <i class="fa-solid fa-phone"></i>
+            </div>
+            <div class="icon-name">FindNum</div>
+        </a>
+
+        <!-- बाकी बचे 22 आइकन्स (A से V तक, जो Google.com पर ले जाएंगे) -->
+        <!-- Row 1 के बचे हुए -->
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">A</div><div class="icon-name">A</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">B</div><div class="icon-name">B</div></a>
+        
+        <!-- Row 2 -->
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">C</div><div class="icon-name">C</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">D</div><div class="icon-name">D</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">E</div><div class="icon-name">E</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">F</div><div class="icon-name">F</div></a>
+        
+        <!-- Row 3 -->
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">G</div><div class="icon-name">G</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">H</div><div class="icon-name">H</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">I</div><div class="icon-name">I</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">J</div><div class="icon-name">J</div></a>
+        
+        <!-- Row 4 -->
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">K</div><div class="icon-name">K</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">L</div><div class="icon-name">L</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">M</div><div class="icon-name">M</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">N</div><div class="icon-name">N</div></a>
+        
+        <!-- Row 5 -->
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">O</div><div class="icon-name">O</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">P</div><div class="icon-name">P</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">Q</div><div class="icon-name">Q</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">R</div><div class="icon-name">R</div></a>
+        
+        <!-- Row 6 -->
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">S</div><div class="icon-name">S</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">T</div><div class="icon-name">T</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">U</div><div class="icon-name">U</div></a>
+        <a href="https://www.google.com" target="_blank" class="grid-item"><div class="icon-circle">V</div><div class="icon-name">V</div></a>
+
+    </div>
+
+</body>
+</html>
