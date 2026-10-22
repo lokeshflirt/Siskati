@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Advanced Bucket Simulator</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    font-family:Segoe UI,Arial;
+    background:radial-gradient(circle at top,#0a1f33,#00040a);
+}
+
+/* MENU BUTTON */
+#menuBtn{
+    position:fixed;
+    top:22px;
+    left:22px;
+    font-size:52px;
+    padding:18px 26px;
+    background:#0d3558;
+    color:#9feaff;
+    border-radius:18px;
+    cursor:pointer;
+    z-index:50;
+    box-shadow:0 0 30px rgba(0,255,255,.45);
+}
+
+/* MENU PANEL */
+#menu{
+    position:fixed;
+    top:-520px;
+    left:0;
+    right:0;
+    height:520px;
+    background:linear-gradient(180deg,#0e3559,#030a14);
+    border-radius:0 0 36px 36px;
+    box-shadow:0 28px 60px rgba(0,0,0,.9);
+    padding:32px;
+    color:#e8faff;
+    transition:.5s ease;
+    z-index:40;
+}
+
+/* MENU CONTENT */
+.menu-row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:22px;
+    margin:22px 0;
+    font-size:26px;
+    font-weight:600;
+}
+.menu-row input{
+    width:120px;
+    padding:10px;
+    font-size:24px;
+    border-radius:10px;
+    border:none;
+    text-align:center;
+}
+
+/* OK BUTTON */
+.ok-btn{
+    padding:12px 30px;
+    font-size:24px;
+    border:none;
+    border-radius:14px;
+    background:#00d9ff;
+    color:#002838;
+    cursor:pointer;
+    font-weight:bold;
+    box-shadow:0 0 18px rgba(0,217,255,.6);
+}
+
+/* MAIN CENTER CONTAINER */
+#container{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* BUCKET AREA */
+#bucketArea{
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+    gap:80px;
+    flex-wrap:wrap;
+}
+
+/* BUCKET */
+.bucket-box{
+    text-align:center;
+    color:#aeefff;
+}
+
+/* BUCKET NAME */
+.bucket-name{
+    font-size:26px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+/* HANDLE */
+.handle{
+    width:68%;
+    height:36px;
+    border:4px solid #9aa4b2;
+    border-bottom:none;
+    border-radius:45px 45px 0 0;
+    margin:0 auto -8px;
+}
+
+/* BUCKET BODY */
+.bucket{
+    position:relative;
+    background:linear-gradient(180deg,#ffffff,#dcdcdc);
+    border:4px solid #6c7a89;
+    border-radius:0 0 36px 36px;
+    overflow:hidden;
+    box-shadow:
+        inset 0 0 22px rgba(0,0,0,.45),
+        0 18px 36px rgba(0,0,0,.75);
+}
+
+/* WATER */
+.water{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:linear-gradient(180deg,#00f0ff,#004dff);
+    transition:.8s ease;
+}
+
+/* WATER TEXT */
+.water-text{
+    position:absolute;
+    top:10px;
+    width:100%;
+    font-size:28px;
+    font-weight:bold;
+    text-align:center;
+    color:#00224d;
+}
+
+/* CAPACITY */
+.capacity{
+    margin-top:14px;
+    font-size:26px;
+    font-weight:bold;
+    color:#ffffff;
+}
+</style>
+</head>
+
+<body>
+
+<div id="menuBtn">☰</div>
+
+<div id="menu">
+    <div class="menu-row">
+        Buckets
+        <input id="bucketCount" type="number" value="3" min="1" max="10">
+        <button class="ok-btn" onclick="applyBucketCount()">OK</button>
+    </div>
+
+    <div id="capacityInputs"></div>
+
+    <div class="menu-row">
+        <button class="ok-btn" onclick="applyCapacities()">OK</button>
+    </div>
+</div>
+
+<div id="container">
+    <div id="bucketArea"></div>
+</div>
+
+<script>
+const menu=document.getElementById("menu");
+const menuBtn=document.getElementById("menuBtn");
+const bucketArea=document.getElementById("bucketArea");
+const capInputs=document.getElementById("capacityInputs");
+const bucketCount=document.getElementById("bucketCount");
+
+let buckets=[], water={}, capacities=[];
+
+/* MENU OPEN */
+menuBtn.onclick=()=>menu.style.top="0";
+
+/* DRAG UP TO CLOSE MENU */
+let startY=0;
+menu.addEventListener("touchstart",e=>startY=e.touches[0].clientY);
+menu.addEventListener("touchmove",e=>{
+    if(startY - e.touches[0].clientY > 60)
+        menu.style.top="-520px";
+});
+
+/* STEP 1 */
+function applyBucketCount(){
+    capInputs.innerHTML="";
+    capacities=[];
+    for(let i=0;i<bucketCount.value;i++){
+        const def=[8,5,3][i]||4;
+        const row=document.createElement("div");
+        row.className="menu-row";
+        row.innerHTML=`B${i+1} <input type="number" value="${def}">`;
+        capInputs.appendChild(row);
+        capacities.push(row.querySelector("input"));
+    }
+}
+
+/* STEP 2 */
+function applyCapacities(){
+    bucketArea.innerHTML="";
+    buckets=[];
+    water={};
+
+    capacities.forEach((inp,i)=>{
+        const cap=Number(inp.value);
+        water[i]=i===0?cap:0;
+
+        const box=document.createElement("div");
+        box.className="bucket-box";
+        box.innerHTML=`
+        <div class="bucket-name">B${i+1}</div>
+        <div class="handle"></div>
+        <div class="bucket"></div>
+        <div class="capacity">${cap}L</div>`;
+        bucketArea.appendChild(box);
+
+        const b=box.querySelector(".bucket");
+        b.dataset.i=i;
+        b.dataset.cap=cap;
+
+        b.style.width=100+cap*9+"px";
+        b.style.height=120+cap*24+"px";
+
+        const w=document.createElement("div");
+        w.className="water";
+        const t=document.createElement("div");
+        t.className="water-text";
+
+        b.append(w,t);
+        buckets.push(b);
+    });
+
+    enableDrag();
+    update();
+    menu.style.top="-520px";
+}
+
+/* UPDATE */
+function update(){
+    buckets.forEach(b=>{
+        const i=b.dataset.i;
+        const cap=b.dataset.cap;
+        b.querySelector(".water").style.height=
+            (water[i]/cap)*100+"%";
+        b.querySelector(".water-text").textContent=
+            water[i]+"L";
+    });
+}
+
+/* DRAG LOGIC */
+let drag=null;
+function enableDrag(){
+    buckets.forEach(b=>{
+        b.draggable=true;
+        b.ondragstart=()=>drag=b;
+        b.ondragover=e=>e.preventDefault();
+        b.ondrop=()=>{
+            if(!drag||drag===b) return;
+            const f=drag.dataset.i, t=b.dataset.i;
+            const move=Math.min(
+                water[f],
+                b.dataset.cap-water[t]
+            );
+            water[f]-=move;
+            water[t]+=move;
+            update();
+        };
+    });
+}
+
+/* INIT */
+applyBucketCount();
+applyCapacities();
+</script>
+
+</body>
+</html>
